@@ -22,7 +22,7 @@
    
 
     <EditText
-        android:id="@+id/edtUsername"
+        android:id="@+id/edtLoginUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvWelcomeText"
@@ -36,10 +36,10 @@
     
 
     <EditText
-        android:id="@+id/edtPassword"
+        android:id="@+id/edtLoginPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtUsername"
+        android:layout_below="@id/edtLoginUsername"
         android:hint="Enter password"
         android:inputType="textPassword"
         android:background="@drawable/input_style"
@@ -57,7 +57,7 @@
         android:textColor="@color/black"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="15dp"
-        android:layout_below="@id/edtPassword"/>
+        android:layout_below="@id/edtLoginPassword"/>
 
 
 
