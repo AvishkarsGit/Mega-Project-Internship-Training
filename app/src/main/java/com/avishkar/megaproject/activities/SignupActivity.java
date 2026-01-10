@@ -38,6 +38,12 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        binding.backIb.setOnClickListener(v ->{
+
+            finish();
+
+        });
+
     }
 
     private Boolean validate() {

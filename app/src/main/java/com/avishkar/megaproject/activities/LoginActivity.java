@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         binding.btnLogin.setOnClickListener(v -> {
-            if(validte()){
+            if(validate()){
 
                 Toast.makeText(this , "Login Successfully " , Toast.LENGTH_SHORT).show();
 
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean validte(){
+    private Boolean validate(){
 
         username = binding.edtLoginUsername.getText().toString().trim();
         password = binding.edtLoginPassword.getText().toString().trim();
