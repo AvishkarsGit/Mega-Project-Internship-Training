@@ -1,6 +1,7 @@
 package com.avishkar.megaproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -10,7 +11,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.avishkar.megaproject.MainActivity;
 import com.avishkar.megaproject.R;
+import com.avishkar.megaproject.constants.Global;
+import com.avishkar.megaproject.constants.Utils;
 import com.avishkar.megaproject.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,15 +38,13 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnLogin.setOnClickListener(v -> {
             if(validate()){
-
                 Toast.makeText(this , "Login Successfully " , Toast.LENGTH_SHORT).show();
-
+                login();
             }
         });
 
         binding.tvSignUp.setOnClickListener(v ->{
-            Intent i = new Intent(LoginActivity.this , SignupActivity.class);
-            startActivity(i);
+            Global.navigate(LoginActivity.this, SignupActivity.class);
         });
 
         binding.tvForgotPassword.setOnClickListener(v ->{
@@ -70,5 +72,28 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+    private void login() {
+        SharedPreferences preferences = getSharedPreferences(Utils.SHARED_PREF_NAME,MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Utils.KEY_LOGIN,true); //i have wrote
+        editor.apply(); //save data
+        Global.navigate(LoginActivity.this, MainActivity.class);
+    }
+
+    private Boolean checkLoggedIn() {
+        SharedPreferences preferences = getSharedPreferences(Utils.SHARED_PREF_NAME,MODE_PRIVATE);
+        return preferences.getBoolean(Utils.KEY_LOGIN,false);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (checkLoggedIn()) {
+            //user is loggedIn already
+            Global.navigate(LoginActivity.this, MainActivity.class);
+        }
+    }
+
 
 }
