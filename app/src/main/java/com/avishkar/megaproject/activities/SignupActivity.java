@@ -30,7 +30,7 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         //handle click on signup button
-        binding.btnSignup.setOnClickListener(v->{
+        binding.btnSignUp.setOnClickListener(v->{
             //validate the data
             if (validate()) {
                 //database handling logic
@@ -47,7 +47,7 @@ public class SignupActivity extends AppCompatActivity {
     private Boolean validate() {
         name = binding.edtName.getText().toString().trim();
         username = binding.edtUsername.getText().toString().trim();
-        phoneNumber = binding.edtPhoneNo.getText().toString().trim();
+        phoneNumber = binding.edtPhone.getText().toString().trim();
         password = binding.edtPassword.getText().toString().trim();
 
         if (name.isEmpty()){

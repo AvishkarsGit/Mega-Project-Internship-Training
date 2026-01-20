@@ -4,49 +4,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@drawable/login_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity">
 
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/logo2" />
+
+
     <TextView
         android:id="@+id/tvWelcomeText"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="Welcome Back"
-        android:textSize="20sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="60dp"
+        android:text="Welcome Back !"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="125dp"/>
-
-   
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edtLoginUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
         android:layout_below="@id/tvWelcomeText"
-        android:hint="Enter username"
+        android:hint="  Enter username"
         android:background="@drawable/input_style"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="12dp"
-        android:layout_margin="15dp"/>
+        android:padding="12dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:drawableStart="@drawable/outline_person_24"
 
-    
+        />
+
 
     <EditText
         android:id="@+id/edtLoginPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
         android:layout_below="@id/edtLoginUsername"
-        android:hint="Enter password"
+        android:hint="  Enter password"
         android:inputType="textPassword"
+        android:padding="12dp"
         android:background="@drawable/input_style"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="12dp"
-        android:layout_margin="15dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:drawableStart="@drawable/outline_lock_24"
+        />
     
     
     <TextView
@@ -60,7 +71,6 @@
         android:layout_below="@id/edtLoginPassword"/>
 
 
-
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
@@ -69,13 +79,64 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_style"
         android:layout_marginTop="10dp"
-        android:text="LogIn"/>
+        android:text="LogIn"
+        android:textColor="@color/white"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/divider"
+        android:layout_below="@id/btnLogin"
+        android:background="@color/black"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        />
+
+    <TextView
+        android:id="@+id/tvSocialLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:text="login with social account"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/btnLogin"
+        android:id="@+id/imgLinearLayout"
+        android:layout_below="@+id/tvSocialLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/gugul"
+          android:layout_marginEnd="50dp" />
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:src="@drawable/appul"
+            android:layout_marginEnd="50dp"/>
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:src="@drawable/facebook"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/imgLinearLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp">
 
