@@ -1,5 +1,6 @@
 package com.avishkar.megaproject;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,14 +10,21 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.avishkar.megaproject.activities.LoginActivity;
+import com.avishkar.megaproject.constants.Global;
+import com.avishkar.megaproject.constants.Utils;
+import com.avishkar.megaproject.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -25,6 +33,17 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //we are in new branch called feature/login
+        binding.btnLogout.setOnClickListener(v-> {
+            logout();
+            Global.navigate(MainActivity.this, LoginActivity.class);
+            finish();
+        });
+    }
+
+    private void logout() {
+        SharedPreferences preferences = getSharedPreferences(Utils.SHARED_PREF_NAME,MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Utils.KEY_LOGIN,false);
+        editor.apply();
     }
 }

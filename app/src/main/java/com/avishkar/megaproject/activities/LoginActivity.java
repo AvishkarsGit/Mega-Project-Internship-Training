@@ -79,21 +79,12 @@ public class LoginActivity extends AppCompatActivity {
         editor.putBoolean(Utils.KEY_LOGIN,true); //i have wrote
         editor.apply(); //save data
         Global.navigate(LoginActivity.this, MainActivity.class);
+        finish();
     }
 
-    private Boolean checkLoggedIn() {
-        SharedPreferences preferences = getSharedPreferences(Utils.SHARED_PREF_NAME,MODE_PRIVATE);
-        return preferences.getBoolean(Utils.KEY_LOGIN,false);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (checkLoggedIn()) {
-            //user is loggedIn already
-            Global.navigate(LoginActivity.this, MainActivity.class);
-        }
-    }
+
+
 
 
 }
