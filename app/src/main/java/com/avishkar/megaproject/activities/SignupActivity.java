@@ -81,7 +81,6 @@ public class SignupActivity extends AppCompatActivity {
         } else if (phoneNumber.length() != 10){
             Toast.makeText(this ,"Please enter Correct Phone Numeber" , Toast.LENGTH_SHORT).show();
             return false;
-
         } else if (password.isEmpty()) {
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return false;
