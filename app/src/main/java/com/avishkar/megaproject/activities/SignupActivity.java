@@ -78,18 +78,18 @@ public class SignupActivity extends AppCompatActivity {
         else if (phoneNumber.isEmpty()) {
             Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else if (password.isEmpty()) {
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+        } else if (phoneNumber.length() != 10){
+            Toast.makeText(this ,"Please enter Correct Phone Numeber" , Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else if (password.length() < 8 && password.length() > 20) {
-            Toast.makeText(this, "Password must be between 8-20 characters", Toast.LENGTH_SHORT).show();
+
+        } else if (password.isEmpty()) {
+            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return false;
         }
         else {
             return true;
         }
+
     }
 
     private void setLogin() {
