@@ -16,13 +16,15 @@ import com.avishkar.megaproject.R;
 import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.constants.Utils;
 import com.avishkar.megaproject.databinding.ActivityLoginBinding;
+import com.avishkar.megaproject.helper.DatabaseHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding ;
 
-    private String username , password ;
+    private String email , password ;
 
+    private DatabaseHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +37,19 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        //initialize
+        init();
 
         binding.btnLogin.setOnClickListener(v -> {
             if(validate()){
-                Toast.makeText(this , "Login Successfully " , Toast.LENGTH_SHORT).show();
-                login();
+                boolean isLoggedIn = helper.login(email, password);
+                if (isLoggedIn) {
+                    Toast.makeText(this , "Login Successfully " , Toast.LENGTH_SHORT).show();
+                    login();
+                }else {
+                    Toast.makeText(this, "Invalid credentials...", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -54,10 +64,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private Boolean validate(){
 
-        username = binding.edtLoginUsername.getText().toString().trim();
+        email = binding.edtLoginEmail.getText().toString().trim();
         password = binding.edtLoginPassword.getText().toString().trim();
 
-        if(username.isEmpty()){
+        if(email.isEmpty()){
             Toast.makeText(this, "Please Enter your Username " , Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -83,7 +93,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+    private void init() {
+        helper = new DatabaseHelper(LoginActivity.this);
+    }
 
 
 

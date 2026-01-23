@@ -2,6 +2,7 @@ package com.avishkar.megaproject.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -54,6 +55,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         else {
             return true;
+        }
+    }
+
+    public Boolean login(String email, String password) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String query ="SELECT * FROM "+Utils.TABLE_NAME+" WHERE "+Utils.COL_EMAIL+" =  ?"+
+                " and "+Utils.COL_PASSWORD+" = ?";
+
+        /*
+            SELECT * FROM register WHERE email = ? and password = ?;
+         */
+        Cursor cursor = database.rawQuery(query,new String[] {email,password});
+        if (cursor.getCount() > 0) {
+            cursor.close();
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }
