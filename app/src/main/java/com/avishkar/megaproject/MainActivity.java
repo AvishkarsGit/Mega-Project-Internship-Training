@@ -1,5 +1,6 @@
 package com.avishkar.megaproject;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.avishkar.megaproject.activities.AddProductActivity;
+import com.avishkar.megaproject.activities.Add_product_activity;
 import com.avishkar.megaproject.activities.LoginActivity;
 import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.constants.Utils;
@@ -51,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
         binding.btnNext.setOnClickListener(v -> {
             Global.navigate(MainActivity.this, AddProductActivity.class);
         });
+
+        binding.btnNext.setOnClickListener(v ->{
+            Global.navigate(this , Add_product_activity.class);
+
+        });
+
 
     }
 

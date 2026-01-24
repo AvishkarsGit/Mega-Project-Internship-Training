@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MegaProject">
         <activity
+            android:name=".activities.Add_product_activity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AddProductActivity"
             android:exported="false" />
         <activity
