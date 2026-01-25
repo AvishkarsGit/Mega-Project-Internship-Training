@@ -44,12 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
         binding.btnLogout.setOnClickListener(v-> {
             logout();
-            Global.navigate(MainActivity.this, LoginActivity.class);
-            finish();
+            Global.navigate(MainActivity.this, LoginActivity.class,true);
         });
 
         binding.btnNext.setOnClickListener(v -> {
-            Global.navigate(MainActivity.this, AddProductActivity.class);
+            Global.navigate(MainActivity.this, AddProductActivity.class,false);
         });
 
     }

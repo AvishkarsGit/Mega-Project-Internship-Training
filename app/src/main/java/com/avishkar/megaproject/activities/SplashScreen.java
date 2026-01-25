@@ -30,12 +30,11 @@ public class SplashScreen extends AppCompatActivity {
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (checkLoggedIn()) {
-                Global.navigate(SplashScreen.this, MainActivity.class);
+                Global.navigate(SplashScreen.this, MainActivity.class, true);
             }
             else {
-                Global.navigate(SplashScreen.this, LoginActivity.class);
+                Global.navigate(SplashScreen.this, LoginActivity.class,true);
             }
-            finish();
         }, 3000);
     }
 

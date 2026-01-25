@@ -49,12 +49,11 @@ public class LoginActivity extends AppCompatActivity {
                 }else {
                     Toast.makeText(this, "Invalid credentials...", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
         binding.tvSignUp.setOnClickListener(v ->{
-            Global.navigate(LoginActivity.this, SignupActivity.class);
+            Global.navigate(LoginActivity.this, SignupActivity.class,false);
         });
 
         binding.tvForgotPassword.setOnClickListener(v ->{
@@ -88,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Utils.KEY_LOGIN,true); //i have wrote
         editor.apply(); //save data
-        Global.navigate(LoginActivity.this, MainActivity.class);
+        Global.navigate(LoginActivity.this, MainActivity.class,true);
         finish();
     }
 

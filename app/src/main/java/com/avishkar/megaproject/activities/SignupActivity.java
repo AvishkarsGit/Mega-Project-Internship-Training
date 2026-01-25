@@ -96,8 +96,7 @@ public class SignupActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Utils.KEY_LOGIN,true); //i have wrote
         editor.apply(); //save data
-        Global.navigate(SignupActivity.this, MainActivity.class);
-        finish();
+        Global.navigate(SignupActivity.this, MainActivity.class,true);
     }
 
     private void init() {
