@@ -164,29 +164,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/imgLinearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Already Have An Account ? "
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/tvSignUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Login.."
-            android:textColor="@color/purple_500"
-            android:textSize="15sp"/>
-
-    </LinearLayout>
 
 </RelativeLayout>
