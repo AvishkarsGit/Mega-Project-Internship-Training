@@ -84,6 +84,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Boolean addProduct(String title,String description, String image,String price, boolean isDiscount, int discount_percent, boolean isTax){
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Utils.COL_PRODUCT_TITLE,title);
+        values.put(Utils.COL_PRODUCT_DESCRIPTION,description);
+        values.put(Utils.COL_PRODUCT_IMAGE,image);
+        values.put(Utils.COL_PRODUCT_PRICE,price);
+//        if (isDiscount) {
+//            values.put(Utils.COL_PRODUCT_DISCOUNT,1);
+//        }
+//        else {
+//
+//            values.put(Utils.COL_PRODUCT_DISCOUNT,0);
+//        }
+        values.put(Utils.COL_PRODUCT_DISCOUNT,(isDiscount ? 1 : 0));
+        values.put(Utils.COL_PRODUCT_DISCOUNT_PERCENT,discount_percent);
+        values.put(Utils.COL_TAX_INCLUDED,(isTax ? 1 : 0));
+        values.put(Utils.COL_PRODUCT_TAX, (isTax ? 18 : 5));
+        values.put(Utils.COL_IS_CART,0);
+        values.put(Utils.COL_PRODUCT_QTY,0);
+
+        long result = database.insert(Utils.TABLE_PRODUCT,null,values);
+        return result != -1;
+    }
 
 
 

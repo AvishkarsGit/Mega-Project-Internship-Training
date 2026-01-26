@@ -21,4 +21,21 @@ public class Query {
             Utils.COL_PRODUCT_QTY+" INTEGER,"+
             Utils.COL_IS_CART+" INTEGER DEFAULT 0,"+
             Utils.COL_PRODUCT_TAX+" INTEGER);";
+
+    public static final String cart ="SELECT * FROM "+Utils.TABLE_PRODUCT+
+            "WHERE "+Utils.COL_IS_CART+" = 1";
+//    SELECT * FROM products WHERE is_cart = 1;
+
+    /*
+        CART
+        -------
+        userId -> User
+        quantity
+        productId -> Product
+        totalPrice
+     */
 }
+
+
+/*
+*/

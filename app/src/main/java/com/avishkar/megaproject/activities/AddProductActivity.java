@@ -32,6 +32,7 @@ public class AddProductActivity extends AppCompatActivity {
     private DatabaseHelper helper;
     private String productTitle, productDescription, productPrice, productDiscount;
     private boolean isDiscount,isTax;
+    private int discount_percent=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,13 +74,35 @@ public class AddProductActivity extends AppCompatActivity {
         });
 
         //click on choose image
-        binding.btnChoose.setOnClickListener(v-> {
+        binding.productIv.setOnClickListener(v-> {
             chooseImage();
         });
 
         //handle click on back button
         binding.backIb.setOnClickListener(v -> {
             finish();
+        });
+
+        //handle click on save button
+        binding.btnSaveProduct.setOnClickListener(v -> {
+            if (validate()) {
+                boolean isAdded = helper.addProduct(
+                        productTitle,
+                        productDescription,
+                        path,
+                        productPrice,
+                        isDiscount,
+                        discount_percent,
+                        isTax
+                );
+                if (isAdded) {
+                    Toast.makeText(this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, "Failed to add product", Toast.LENGTH_SHORT).show();
+                }
+            }
+
         });
     }
 
@@ -109,6 +132,33 @@ public class AddProductActivity extends AppCompatActivity {
         else if (productPrice.isEmpty()) {
             Toast.makeText(this, "Enter product price", Toast.LENGTH_SHORT).show();
             return false;
+        }
+        else if(Integer.parseInt(productPrice) < 1) {
+            Toast.makeText(this, "Price should be greater than 0", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (path == null) {
+            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (isDiscount) {
+            productDiscount = binding.edtDiscount.getText().toString().trim();
+            if (productDiscount.isEmpty()) {
+                Toast.makeText(this, "Enter discount", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else  if (Integer.parseInt(productDiscount) < 1) {
+                Toast.makeText(this, "Enter non-zero value", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else if (Integer.parseInt(productDiscount) > 20) {
+                Toast.makeText(this, "Maximum discount allowed only 20%", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else {
+                discount_percent = Integer.parseInt(productDiscount);
+                return true;
+            }
         }
         else {
             return true;
