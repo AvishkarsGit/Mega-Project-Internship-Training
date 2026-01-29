@@ -192,9 +192,7 @@ public class AddProductActivity extends AppCompatActivity {
                 if (uri != null) {
                     try {
                         binding.productIv.setImageURI(uri);
-                        Toast.makeText(this, "content uri:"+uri, Toast.LENGTH_LONG).show();
                         path = copyImageToInternalStorage(uri);
-                        Toast.makeText(this, "path:"+path, Toast.LENGTH_LONG).show();
 
                     }catch (Exception e) {
                         e.printStackTrace();

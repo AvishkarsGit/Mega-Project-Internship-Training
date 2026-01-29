@@ -12,6 +12,9 @@ import androidx.annotation.UiThread;
 
 import com.avishkar.megaproject.constants.Query;
 import com.avishkar.megaproject.constants.Utils;
+import com.avishkar.megaproject.models.ProductsModel;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -110,7 +113,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    public ArrayList<ProductsModel> getAllProducts(){
+        ArrayList<ProductsModel> modelsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase(); //open db in read mode
+        Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_PRODUCT,null);
+        while(cursor.moveToNext()) {
+            ProductsModel model = new ProductsModel();
+            int colIndex = cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_ID);
+            int id = cursor.getInt(colIndex);
+            model.setId(id);
+            model.setProductTitle(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TITLE)));
+            model.setProductDescription(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DESCRIPTION)));
+            model.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_IMAGE)));
+            model.setProductPrice(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_PRICE)));
+            int discount = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT));
+            //discount = 0 || 1
+            //relational operators : < > <= >= !=
+            //comparison operator : ==
 
+            model.setDiscount(discount == 1);
+            model.setProductDiscount(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT_PERCENT)));
+            int tax = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_TAX_INCLUDED));
+            model.setTax(tax==1);
+            model.setTax(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TAX)));
+            modelsList.add(model);
+
+        }
+        cursor.close();
+        return modelsList;
+    }
 
 
 }
