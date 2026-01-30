@@ -86,4 +86,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
     private int calculateDiscount(int amount, int discountPercent) {
         return (amount / 100) * discountPercent;
     }
+
+    public void updateList( ArrayList<ProductsModel> list){
+
+        this.productList = list ;
+
+        notifyDataSetChanged();
+
+    }
 }

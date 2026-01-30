@@ -2,6 +2,8 @@ package com.avishkar.megaproject;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private DatabaseHelper helper;
+
+    private ProductsAdapter adapter ;
 
     private String image;
     private ArrayList<ProductsModel> productsList;
@@ -55,7 +59,25 @@ public class MainActivity extends AppCompatActivity {
             Global.navigate(MainActivity.this, AddProductActivity.class,false);
         });
 
-        fetchAllData();
+        binding.searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                 ArrayList<ProductsModel> filterList =helper.searchProduct( s.toString());
+                 adapter.updateList(filterList);
+
+            }
+        });
     }
 
     private void init() {
@@ -73,7 +95,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchAllData() {
         productsList =  helper.getAllProducts();
-        ProductsAdapter adapter = new ProductsAdapter(MainActivity.this,productsList);
+        adapter= new ProductsAdapter(MainActivity.this,productsList);
         binding.productsRv.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        fetchAllData();
+
     }
 }

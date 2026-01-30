@@ -143,7 +143,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return modelsList;
     }
 
-    public void searchProduct(String keyword) {
+    public ArrayList<ProductsModel> searchProduct(String keyword) {
+
+        ArrayList<ProductsModel> filterList = new ArrayList<>();
+
         SQLiteDatabase db = this.getReadableDatabase();
         //SELECT * FROM products WHERE product_title LIKE '%T%'
         String args[] = new String[] {"%"+keyword+"%"};
@@ -163,7 +166,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int tax = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_TAX_INCLUDED));
             model.setTax(tax==1);
             model.setTax(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TAX)));
+
+            filterList.add(model);
+
         }
+        return filterList;
+    }
+
+    public Boolean addToCart( int productId){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Utils.COL_IS_CART , 1);
+
+
+       int result =  db.update(
+                Utils.TABLE_PRODUCT, values , Utils.COL_PRODUCT_ID + " = ? " , new String[]{String.valueOf(productId)}
+        );
+       return result > 0;
+
     }
 
 
