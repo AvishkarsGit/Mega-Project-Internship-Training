@@ -39,6 +39,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
         holder.txtDesc.setText(model.getProductDescription());
         holder.txtPrice.setText(model.getProductPrice());
 
+
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(model.getProductImage());
             holder.imgProduct.setImageBitmap(bitmap);
@@ -51,20 +52,29 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
             //show discount price
             holder.txtDiscount.setVisibility(View.VISIBLE);
             holder.txtOldPrice.setVisibility(View.VISIBLE);
-            holder.txtDiscount.setText(model.getProductDiscount()+"% Off");
+            holder.txtDiscount.setText(model.getProductDiscount()+"%");
             holder.txtOldPrice.setText("₹"+model.getProductPrice()+".00");
             holder.txtOldPrice.setPaintFlags(holder.txtOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             int discountPrice = calculateDiscount(Integer.parseInt(model.getProductPrice()),model.getProductDiscount());
             holder.txtPrice.setText("₹"+(Integer.parseInt(model.getProductPrice()) - discountPrice)+".00");
 
-        }else {
+        }
+        else {
             //show only normal price
             holder.txtDiscount.setVisibility(View.GONE);
             holder.txtOldPrice.setVisibility(View.GONE);
             holder.txtPrice.setText("₹"+model.getProductPrice()+".00");
         }
+
         holder.btnAddToCart.setOnClickListener(v->{
             //handle click on add to cart
+            //show quantity layout
+            holder.quantityLayout.setVisibility(View.VISIBLE);
+            holder.txtQuantity.setText(""+(model.getQuantity()+1));
+            holder.btnAddToCart.setVisibility(View.GONE);
+        });
+
+        holder.txtQuantityPlus.setOnClickListener(v -> {
         });
     }
 

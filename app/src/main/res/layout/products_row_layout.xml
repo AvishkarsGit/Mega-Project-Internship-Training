@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="200dp"
+    android:layout_width="150dp"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="4dp">
+    android:layout_margin="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,12 +12,96 @@
         android:padding="10dp">
 
         <!-- Product Image -->
-        <ImageView
-            android:id="@+id/imgProduct"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            android:layout_height="120dp">
+
+
+
+            <!-- product image -->
+            <ImageView
+                android:id="@+id/imgProduct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/image_view_bg"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop" />
+
+
+            <!-- discount -->
+            <TextView
+                android:id="@+id/txtDiscount"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:text="77%"
+                android:textAlignment="center"
+                android:padding="3dp"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/discount_bg"/>
+
+            <!-- cart button layout-->
+            <ImageButton
+                android:id="@+id/btnAddToCart"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/add_cart"
+                android:background="@drawable/add_to_cart"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="5dp"
+                />
+
+            <!-- quntity layout -->
+            <LinearLayout
+                android:id="@+id/quantityLayout"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="7dp"
+                android:background="@drawable/quantity_bg"
+                android:padding="8dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtQuantityMinus"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="-"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/txtQuantity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:text="1"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtQuantityPlus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="+"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
 
         <!-- Brand Name -->
         <TextView
@@ -28,8 +109,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="mobizio"
+            android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:layout_marginTop="6dp"/>
 
         <!-- Product Description -->
@@ -52,45 +134,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtOldPrice"
-                android:text="₹1599"
+                android:text="₹108"
                 android:textSize="12sp"
-                android:visibility="gone"
-                android:textColor="#999"/>
+                android:textColor="#212121"
+                android:layout_marginRight="5dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtPrice"
-                android:text="  ₹375"
+                android:text="₹375"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="#000"/>
         </LinearLayout>
 
         <!-- Discount -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtDiscount"
-            android:text="77% off"
-            android:textColor="#1B8E3E"
-            android:visibility="gone"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_marginTop="2dp"/>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/txtDiscount"-->
+<!--            android:text="77% off"-->
+<!--            android:textColor="#1B8E3E"-->
+<!--            android:visibility="gone"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_marginTop="2dp"/>-->
 
         <!-- Add to Cart Button -->
-        <Button
-            android:id="@+id/btnAddToCart"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="#2874F0"
-            android:text="Add to Cart"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
+<!--        <Button-->
+<!--            android:id="@+id/btnAddToCart"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:backgroundTint="#2874F0"-->
+<!--            android:text="Add to Cart"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="#FFFFFF"-->
+<!--            android:textSize="13sp" />-->
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>

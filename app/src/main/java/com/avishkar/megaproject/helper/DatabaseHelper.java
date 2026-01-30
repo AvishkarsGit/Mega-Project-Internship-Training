@@ -143,5 +143,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return modelsList;
     }
 
+    public void searchProduct(String keyword) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        //SELECT * FROM products WHERE product_title LIKE '%T%'
+        String args[] = new String[] {"%"+keyword+"%"};
+        Cursor cursor = db.rawQuery("SELECT * FROM "+Utils.TABLE_PRODUCT+" WHERE "+Utils.COL_PRODUCT_TITLE+" LIKE ?",args );
+        while (cursor.moveToNext()) {
+            ProductsModel model = new ProductsModel();
+            int colIndex = cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_ID);
+            int id = cursor.getInt(colIndex);
+            model.setId(id);
+            model.setProductTitle(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TITLE)));
+            model.setProductDescription(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DESCRIPTION)));
+            model.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_IMAGE)));
+            model.setProductPrice(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_PRICE)));
+            int discount = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT));
+            model.setDiscount(discount == 1);
+            model.setProductDiscount(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT_PERCENT)));
+            int tax = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_TAX_INCLUDED));
+            model.setTax(tax==1);
+            model.setTax(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TAX)));
+        }
+    }
+
 
 }
