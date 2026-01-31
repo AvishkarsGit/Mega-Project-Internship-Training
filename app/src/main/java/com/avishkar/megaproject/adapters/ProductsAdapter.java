@@ -7,11 +7,13 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avishkar.megaproject.R;
+import com.avishkar.megaproject.helper.DatabaseHelper;
 import com.avishkar.megaproject.holders.ProductsViewHolder;
 import com.avishkar.megaproject.models.ProductsModel;
 
@@ -67,11 +69,26 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
         }
 
         holder.btnAddToCart.setOnClickListener(v->{
+
+            int productId = model.getId();
+            DatabaseHelper databaseHelper = new DatabaseHelper(v.getContext());
+            Boolean isAdded = databaseHelper.addToCart(productId);
+            if (isAdded){
+
+                Toast.makeText(context , "Product added " , Toast.LENGTH_SHORT).show();
+
+                holder.btnAddToCart.setVisibility(View.GONE);
+                holder.quantityLayout.setVisibility(View.VISIBLE);
+                holder.txtQuantity.setText(""+(model.getQuantity()+1));
+            }else {
+                Toast.makeText(context , "Something went wrong" , Toast.LENGTH_SHORT).show();
+
+            }
+
             //handle click on add to cart
             //show quantity layout
-            holder.quantityLayout.setVisibility(View.VISIBLE);
-            holder.txtQuantity.setText(""+(model.getQuantity()+1));
-            holder.btnAddToCart.setVisibility(View.GONE);
+
+
         });
 
         holder.txtQuantityPlus.setOnClickListener(v -> {
@@ -88,9 +105,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
     }
 
     public void updateList( ArrayList<ProductsModel> list){
-
         this.productList = list ;
-
         notifyDataSetChanged();
 
     }

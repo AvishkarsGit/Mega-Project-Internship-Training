@@ -180,12 +180,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(Utils.COL_IS_CART , 1);
 
-
        int result =  db.update(
                 Utils.TABLE_PRODUCT, values , Utils.COL_PRODUCT_ID + " = ? " , new String[]{String.valueOf(productId)}
         );
        return result > 0;
 
+    }
+
+    public ArrayList<ProductsModel> getCartProducts(){
+
+        ArrayList<ProductsModel> modals = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Utils.TABLE_PRODUCT + " WHERE " + Utils.COL_IS_CART + " = 1" , null);
+        while (cursor.moveToNext()){
+
+            ProductsModel model = new ProductsModel();
+            model.setProductTitle(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TITLE)));
+            model.setId(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_ID)));
+            model.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_IMAGE)));
+            model.setProductPrice(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_PRICE)));
+            int discount = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT));
+            //discount = 0 || 1
+            //relational operators : < > <= >= !=
+            //comparison operator : ==
+
+            model.setDiscount(discount == 1);
+            model.setProductDiscount(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT_PERCENT)));
+            int tax = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_TAX_INCLUDED));
+            model.setTax(tax==1);
+            model.setTax(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TAX)));
+            modals.add(model);
+
+        }
+        return modals;
     }
 
 

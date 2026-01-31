@@ -13,8 +13,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.avishkar.megaproject.activities.AddCartActivity;
 import com.avishkar.megaproject.activities.AddProductActivity;
 import com.avishkar.megaproject.activities.LoginActivity;
+import com.avishkar.megaproject.adapters.CartAdapter;
 import com.avishkar.megaproject.adapters.ProductsAdapter;
 import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.constants.Utils;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper helper;
 
     private ProductsAdapter adapter ;
+
+    private CartAdapter cartAdapter ;
 
     private String image;
     private ArrayList<ProductsModel> productsList;
@@ -57,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         binding.btnNext.setOnClickListener(v -> {
             Global.navigate(MainActivity.this, AddProductActivity.class,false);
+        });
+
+        binding.btnCart.setOnClickListener(v -> {
+            Global.navigate(MainActivity.this, AddCartActivity.class,false);
         });
 
         binding.searchView.addTextChangedListener(new TextWatcher() {
@@ -97,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         productsList =  helper.getAllProducts();
         adapter= new ProductsAdapter(MainActivity.this,productsList);
         binding.productsRv.setAdapter(adapter);
+        cartAdapter = new CartAdapter(MainActivity.this,productsList);
     }
 
     @Override
