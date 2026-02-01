@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avishkar.megaproject.R;
+import com.avishkar.megaproject.helper.DatabaseHelper;
 import com.avishkar.megaproject.holders.CartViewHolder;
 import com.avishkar.megaproject.models.ProductsModel;
 
@@ -18,14 +19,16 @@ import java.util.ArrayList;
 
 public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
-    Context context;
+    private Context context;
+    private ArrayList<ProductsModel> cartList;
+    private DatabaseHelper helper;
 
     public CartAdapter(Context context, ArrayList<ProductsModel> cartList) {
         this.context = context;
         this.cartList = cartList;
+        helper = new DatabaseHelper(context);
     }
 
-    ArrayList<ProductsModel> cartList;
 
 
     @NonNull
@@ -60,7 +63,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
         });
 
         holder.remove.setOnClickListener(v -> {
-
+            helper.addAndRemoveItemFromCart(product.getId(),false);
         });
 
 

@@ -1,6 +1,9 @@
 package com.avishkar.megaproject.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -13,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avishkar.megaproject.R;
+import com.avishkar.megaproject.activities.AddProductActivity;
+import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.helper.DatabaseHelper;
 import com.avishkar.megaproject.holders.ProductsViewHolder;
 import com.avishkar.megaproject.models.ProductsModel;
@@ -22,9 +27,11 @@ import java.util.ArrayList;
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
     private Context context;
     private ArrayList<ProductsModel> productList;
+    private DatabaseHelper helper;
     public ProductsAdapter(Context context,ArrayList<ProductsModel> productList) {
         this.context = context;
         this.productList = productList;
+        helper = new DatabaseHelper(context);
     }
 
     @NonNull
@@ -40,7 +47,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
         holder.txtTitle.setText(model.getProductTitle());
         holder.txtDesc.setText(model.getProductDescription());
         holder.txtPrice.setText(model.getProductPrice());
-
 
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(model.getProductImage());
@@ -67,32 +73,99 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
             holder.txtOldPrice.setVisibility(View.GONE);
             holder.txtPrice.setText("₹"+model.getProductPrice()+".00");
         }
+        //check if item is in the cart
+        if (model.isCart()) {
+            holder.btnAddToCart.setVisibility(View.GONE);
+            holder.quantityLayout.setVisibility(View.VISIBLE);
+            holder.txtQuantity.setText(""+model.getQuantity());
+        }
+        else {
+            holder.btnAddToCart.setVisibility(View.VISIBLE);
+            holder.quantityLayout.setVisibility(View.GONE);
+        }
 
         holder.btnAddToCart.setOnClickListener(v->{
 
             int productId = model.getId();
-            DatabaseHelper databaseHelper = new DatabaseHelper(v.getContext());
-            Boolean isAdded = databaseHelper.addToCart(productId);
+            boolean isAdded = helper.addAndRemoveItemFromCart(productId,true);
             if (isAdded){
-
                 Toast.makeText(context , "Product added " , Toast.LENGTH_SHORT).show();
+                model.setCart(true);
+                model.setQuantity(1);
+                helper.updateQuantity(model.getId(),1);
+                notifyItemChanged(position);
 
-                holder.btnAddToCart.setVisibility(View.GONE);
-                holder.quantityLayout.setVisibility(View.VISIBLE);
-                holder.txtQuantity.setText(""+(model.getQuantity()+1));
-            }else {
+            }
+            else {
                 Toast.makeText(context , "Something went wrong" , Toast.LENGTH_SHORT).show();
 
             }
 
-            //handle click on add to cart
-            //show quantity layout
-
-
         });
 
         holder.txtQuantityPlus.setOnClickListener(v -> {
+            int qty = model.getQuantity();
+            qty++;
+            model.setQuantity(qty);
+            notifyItemChanged(position);
+            helper.updateQuantity(model.getId(),qty);
         });
+
+       holder.txtQuantityMinus.setOnClickListener(v -> {
+            int qty = model.getQuantity();
+            if (qty > 1) {
+                qty--;
+                model.setQuantity(qty);
+                helper.updateQuantity(model.getId(),qty);
+            }
+            else {
+                model.setQuantity(0);
+                helper.updateQuantity(model.getId(),0);
+                helper.addAndRemoveItemFromCart(model.getId(),false);
+                model.setCart(false);
+            }
+            notifyItemChanged(position);
+        });
+
+       holder.itemView.setOnClickListener(v->{
+           Intent i=new Intent(context, AddProductActivity.class);
+           i.putExtra("product",model);
+           i.putExtra("isEdited",true);
+           context.startActivity(i);
+       });
+
+       holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+           @Override
+           public boolean onLongClick(View v) {
+               new AlertDialog.Builder(context)
+                       .setTitle("Delete Item")
+                       .setMessage("Are you sure you want to delete this product?")
+                       .setCancelable(false)
+                       .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               //delete
+                               boolean isDeleted = helper.deleteProduct(model.getId());
+                               if (isDeleted) {
+                                   productList.remove(position);
+                                   notifyItemRemoved(position);
+                                   notifyItemRangeRemoved(position,productList.size());
+                                   Toast.makeText(context, "Product deleted Successfully.", Toast.LENGTH_SHORT).show();
+                               }
+                               else {
+                                   Toast.makeText(context, "Failed to delete product", Toast.LENGTH_SHORT).show();
+                               }
+                           }
+                       })
+                       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                           }
+                       }).show();
+               return true;
+           }
+       });
     }
 
     @Override

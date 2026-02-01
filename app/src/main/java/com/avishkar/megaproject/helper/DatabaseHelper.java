@@ -127,10 +127,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             model.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_IMAGE)));
             model.setProductPrice(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_PRICE)));
             int discount = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT));
-            //discount = 0 || 1
-            //relational operators : < > <= >= !=
-            //comparison operator : ==
-
+            int isCart = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_IS_CART));
+            model.setCart(isCart == 1);
+            model.setQuantity(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_QTY)));
             model.setDiscount(discount == 1);
             model.setProductDiscount(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT_PERCENT)));
             int tax = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_TAX_INCLUDED));
@@ -173,12 +172,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return filterList;
     }
 
-    public Boolean addToCart( int productId){
+    public Boolean addAndRemoveItemFromCart(int productId, boolean isAdded){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Utils.COL_IS_CART , 1);
+        values.put(Utils.COL_IS_CART , (isAdded ? 1 : 0));
 
        int result =  db.update(
                 Utils.TABLE_PRODUCT, values , Utils.COL_PRODUCT_ID + " = ? " , new String[]{String.valueOf(productId)}
@@ -196,15 +195,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
 
             ProductsModel model = new ProductsModel();
+            int colIndex = cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_ID);
+            int id = cursor.getInt(colIndex);
+            model.setId(id);
             model.setProductTitle(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TITLE)));
-            model.setId(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_ID)));
+            model.setProductDescription(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DESCRIPTION)));
             model.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_IMAGE)));
             model.setProductPrice(cursor.getString(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_PRICE)));
             int discount = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT));
-            //discount = 0 || 1
-            //relational operators : < > <= >= !=
-            //comparison operator : ==
-
+            int isCart = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_IS_CART));
+            model.setCart(isCart == 1);
+            model.setQuantity(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_QTY)));
             model.setDiscount(discount == 1);
             model.setProductDiscount(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT_PERCENT)));
             int tax = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_TAX_INCLUDED));
@@ -216,5 +217,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return modals;
     }
 
+    public void updateQuantity(int id,int quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Utils.COL_PRODUCT_QTY,quantity);
+        db.update(Utils.TABLE_PRODUCT,values,Utils.COL_PRODUCT_ID+" = ?",new String[]{String.valueOf(id)});
+    }
 
+    public boolean updateProduct(int id,String title,String description, String image,String price, boolean isDiscount, int discount_percent, boolean isTax) {
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Utils.COL_PRODUCT_TITLE,title);
+        values.put(Utils.COL_PRODUCT_DESCRIPTION,description);
+        values.put(Utils.COL_PRODUCT_IMAGE,image);
+        values.put(Utils.COL_PRODUCT_PRICE,price);
+        values.put(Utils.COL_PRODUCT_DISCOUNT,(isDiscount ? 1 : 0));
+        values.put(Utils.COL_PRODUCT_DISCOUNT_PERCENT,discount_percent);
+        values.put(Utils.COL_TAX_INCLUDED,(isTax ? 1 : 0));
+        values.put(Utils.COL_PRODUCT_TAX, (isTax ? 18 : 5));
+        values.put(Utils.COL_IS_CART,0);
+        values.put(Utils.COL_PRODUCT_QTY,0);
+
+        long result = database.update(Utils.TABLE_PRODUCT,values,Utils.COL_PRODUCT_ID+" = ?",new String[]{String.valueOf(id)});
+        return result > 0;
+    }
+
+    public boolean deleteProduct(int id){
+        SQLiteDatabase db =this.getWritableDatabase();
+        int result = db.delete(Utils.TABLE_PRODUCT,Utils.COL_PRODUCT_ID+" = ?",new String[]{String.valueOf(id)});
+        return result > 0;
+    }
 }

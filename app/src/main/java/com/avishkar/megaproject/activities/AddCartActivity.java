@@ -50,7 +50,7 @@ public class AddCartActivity extends AppCompatActivity {
 
         button = findViewById(R.id.CartbackIb);
         button.setOnClickListener(v -> {
-            Global.navigate(AddCartActivity.this, MainActivity.class,true);
+            finish();
         });
 
     }

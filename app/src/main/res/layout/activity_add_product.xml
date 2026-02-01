@@ -17,9 +17,10 @@
         >
 
         <TextView
+            android:id="@+id/toolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add New Product "
+            android:text="Add New Product"
             android:textColor="#444456"
             android:textSize="20dp"
             android:textStyle="bold"

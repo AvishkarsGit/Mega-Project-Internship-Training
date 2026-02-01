@@ -1,5 +1,7 @@
 package com.avishkar.megaproject.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.avishkar.megaproject.R;
 import com.avishkar.megaproject.databinding.ActivityAddProductBinding;
 import com.avishkar.megaproject.helper.DatabaseHelper;
+import com.avishkar.megaproject.models.ProductsModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,6 +36,13 @@ public class AddProductActivity extends AppCompatActivity {
     private String productTitle, productDescription, productPrice, productDiscount;
     private boolean isDiscount,isTax;
     private int discount_percent=0;
+
+    //model
+    private ProductsModel model;
+
+    //is Edited
+    private boolean isEdited = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,27 +96,90 @@ public class AddProductActivity extends AppCompatActivity {
         //handle click on save button
         binding.btnSaveProduct.setOnClickListener(v -> {
             if (validate()) {
-                boolean isAdded = helper.addProduct(
-                        productTitle,
-                        productDescription,
-                        path,
-                        productPrice,
-                        isDiscount,
-                        discount_percent,
-                        isTax
-                );
-                if (isAdded) {
-                    Toast.makeText(this, "Product added successfully", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(this, "Failed to add product", Toast.LENGTH_SHORT).show();
+                if (isEdited) {
+                    //edit data
+                    boolean isUpdated = helper.updateProduct(
+                            model.getId(),
+                            productTitle,
+                            productDescription,
+                            path,
+                            productPrice,
+                            isDiscount,
+                            discount_percent,
+                            isTax
+                    );
+                    if (isUpdated) {
+                        Toast.makeText(this, "Product Updated", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(this, "Failed to update", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    boolean isAdded = helper.addProduct(
+                            productTitle,
+                            productDescription,
+                            path,
+                            productPrice,
+                            isDiscount,
+                            discount_percent,
+                            isTax
+                    );
+                    if (isAdded) {
+                        Toast.makeText(this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(this, "Failed to add product", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
         });
+
+        //set all the data
+        if (isEdited) {
+            setData();
+        }
+
+    }
+
+    private void setData() {
+        binding.toolbarTitle.setText("Edit Product");
+
+        //set all data
+        productTitle = model.getProductTitle();
+        productDescription = model.getProductDescription();
+        productPrice = model.getProductPrice();
+        path = model.getProductImage();
+        isDiscount = model.isDiscount();
+        discount_percent = model.getProductDiscount();
+        isTax = model.isTax();
+
+        binding.edtTitle.setText(productTitle);
+        binding.edtDescription.setText(productDescription);
+        binding.edtPrice.setText(productPrice);
+
+        //if discount is available
+        binding.discountSwitch.setChecked(isDiscount);
+        binding.edtDiscount.setText(""+discount_percent);
+        binding.taxCheckbox.setChecked(isTax);
+
+
+
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            binding.productIv.setImageBitmap(bitmap);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //change button text
+        binding.btnSaveProduct.setText("Update Product");
     }
 
     private void init(){
+        model = (ProductsModel) getIntent().getSerializableExtra("product");
+        isEdited = (Boolean) getIntent().getBooleanExtra("isEdited",false);
         helper = new DatabaseHelper(AddProductActivity.this);
     }
 

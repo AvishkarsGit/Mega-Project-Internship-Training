@@ -1,6 +1,8 @@
 package com.avishkar.megaproject.models;
 
-public class ProductsModel {
+import java.io.Serializable;
+
+public class ProductsModel implements Serializable {
 
     String productTitle,productDescription, productPrice, productImage;
     int id,productDiscount,tax,quantity;
