@@ -142,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return modelsList;
     }
 
-    public ArrayList<ProductsModel> searchProduct(String keyword) {
+    public ArrayList<ProductsModel> searchProduct(String keyword)   {
 
         ArrayList<ProductsModel> filterList = new ArrayList<>();
 

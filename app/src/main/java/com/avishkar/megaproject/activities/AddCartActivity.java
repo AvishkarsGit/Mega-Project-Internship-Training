@@ -1,8 +1,13 @@
 package com.avishkar.megaproject.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,16 +23,21 @@ import com.avishkar.megaproject.adapters.CartAdapter;
 import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.helper.DatabaseHelper;
 import com.avishkar.megaproject.models.ProductsModel;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class AddCartActivity extends AppCompatActivity {
+public class AddCartActivity extends AppCompatActivity  {
 
    ImageButton button ;
 
    private RecyclerView addCartRv ;
    private ArrayList<ProductsModel> cartProductList;
     private DatabaseHelper databaseHelper;
+
+    private TextView tvTotalPrice, tvTotalTax, tvFinalPrice;
+
+
 
 
     @Override
@@ -45,30 +55,33 @@ public class AddCartActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         addCartRv.setLayoutManager(new LinearLayoutManager(this));
 
-
-
-
         button = findViewById(R.id.CartbackIb);
         button.setOnClickListener(v -> {
             finish();
         });
+
+        tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        tvTotalTax = findViewById(R.id.tvTotalTax);
+        tvFinalPrice = findViewById(R.id.tvFinalPrice);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         loadCartProducts();
     }
 
     private void loadCartProducts() {
 
         cartProductList = databaseHelper.getCartProducts();
-
         CartAdapter adapter = new CartAdapter(this , cartProductList);
         addCartRv.setAdapter(adapter);
+
     }
+
+
+
 
 
 }

@@ -44,13 +44,125 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addCartRv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/addCart"
         android:layout_margin="5dp"
-        android:layout_marginTop="-5dp"
-        android:layout_marginBottom="5dp"
-        tools:listitem="@layout/addtocart_row_layout" />
+        android:paddingBottom="60dp"
+
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/addCartRv"
+        android:layout_marginTop="15dp"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bill Details"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+
+            />
+
+
+        <!-- total price-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Item Total"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:id="@+id/tvTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="00.00"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+
+        </RelativeLayout>
+
+        <!-- total tax -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tax"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:id="@+id/tvTotalTax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00.00"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_alignParentEnd="true"/>
+
+
+        </RelativeLayout>
+
+        <!-- horizontal line -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"/>
+
+
+
+        <!-- final price -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To Pay"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:id="@+id/tvFinalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00.00"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_alignParentEnd="true"/>
+
+
+        </RelativeLayout>
+
+
+
+</LinearLayout>
 
 
 </RelativeLayout>
