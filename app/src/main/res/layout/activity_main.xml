@@ -34,6 +34,7 @@
 
             <!-- badge -->
             <TextView
+                android:id="@+id/txtCartCountBadge"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:text="1"
@@ -43,6 +44,7 @@
                 android:background="@drawable/badge_bg"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="5dp"
+                android:visibility="gone"
                 android:textColor="@color/white"/>
 
             <ImageButton

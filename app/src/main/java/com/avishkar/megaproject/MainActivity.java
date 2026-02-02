@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -103,16 +105,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchAllData() {
         productsList =  helper.getAllProducts();
-        adapter= new ProductsAdapter(MainActivity.this,productsList);
+        adapter= new ProductsAdapter(MainActivity.this,productsList,this);
         binding.productsRv.setAdapter(adapter);
         cartAdapter = new CartAdapter(MainActivity.this,productsList);
+        updateCartCount();
+    }
+
+    public void updateCartCount() {
+        //txt badge
+        int cartCount = helper.getItemsCount();
+        if (cartCount > 0) {
+            binding.txtCartCountBadge.setVisibility(View.VISIBLE);
+            binding.txtCartCountBadge.setText(String.valueOf(cartCount));
+        }
+        else {
+            binding.txtCartCountBadge.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         fetchAllData();
 
     }
+
+
 }

@@ -5,20 +5,21 @@ import java.io.Serializable;
 public class ProductsModel implements Serializable {
 
     String productTitle,productDescription, productPrice, productImage;
-    int id,productDiscount,tax,quantity;
+    int id,productDiscount,tax,quantity, productDiscountPrice;
     boolean isDiscount, isTax, isCart;
 
     public ProductsModel() {
         //default constructor
     }
 
-    public ProductsModel(int id,String productTitle, String productDescription, String productPrice, String productImage, int productDiscount, int tax, int quantity, boolean isDiscount, boolean isTax, boolean isCart) {
+    public ProductsModel(int id,String productTitle, String productDescription, String productPrice, String productImage, int productDiscount, int productDiscountPrice, int tax, int quantity, boolean isDiscount, boolean isTax, boolean isCart) {
         this.id = id;
         this.productTitle = productTitle;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.productImage = productImage;
         this.productDiscount = productDiscount;
+        this.productDiscountPrice = productDiscountPrice;
         this.tax = tax;
         this.quantity = quantity;
         this.isDiscount = isDiscount;
@@ -57,6 +58,14 @@ public class ProductsModel implements Serializable {
 
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
+    }
+
+    public int getProductDiscountPrice() {
+        return productDiscountPrice;
+    }
+
+    public void setProductDiscountPrice(int productDiscountPrice) {
+        this.productDiscountPrice = productDiscountPrice;
     }
 
     public String getProductPrice() {

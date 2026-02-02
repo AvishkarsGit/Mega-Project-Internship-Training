@@ -12,4 +12,8 @@ public class Global {
         }
         context.startActivity(i);
     }
+
+    public static int calculateDiscount(int amount, int discountPercent) {
+        return (amount / 100) * discountPercent;
+    }
 }

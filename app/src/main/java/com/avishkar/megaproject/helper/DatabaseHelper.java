@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
+import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.constants.Query;
 import com.avishkar.megaproject.constants.Utils;
 import com.avishkar.megaproject.models.ProductsModel;
@@ -162,6 +163,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int discount = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT));
             model.setDiscount(discount == 1);
             model.setProductDiscount(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_DISCOUNT_PERCENT)));
+
             int tax = cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_TAX_INCLUDED));
             model.setTax(tax==1);
             model.setTax(cursor.getInt(cursor.getColumnIndexOrThrow(Utils.COL_PRODUCT_TAX)));
@@ -247,5 +249,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db =this.getWritableDatabase();
         int result = db.delete(Utils.TABLE_PRODUCT,Utils.COL_PRODUCT_ID+" = ?",new String[]{String.valueOf(id)});
         return result > 0;
+    }
+
+    public int getItemsCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM "+Utils.TABLE_PRODUCT+" WHERE "+Utils.COL_IS_CART+" = 1",null);
+        int count = 0;
+        if(cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
     }
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.avishkar.megaproject.MainActivity;
 import com.avishkar.megaproject.R;
 import com.avishkar.megaproject.activities.AddProductActivity;
 import com.avishkar.megaproject.constants.Global;
@@ -28,10 +29,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
     private Context context;
     private ArrayList<ProductsModel> productList;
     private DatabaseHelper helper;
-    public ProductsAdapter(Context context,ArrayList<ProductsModel> productList) {
+    private MainActivity mainActivity;
+    public ProductsAdapter(Context context,ArrayList<ProductsModel> productList, MainActivity mainActivity) {
         this.context = context;
         this.productList = productList;
         helper = new DatabaseHelper(context);
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -46,7 +49,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
         final ProductsModel model = productList.get(position);
         holder.txtTitle.setText(model.getProductTitle());
         holder.txtDesc.setText(model.getProductDescription());
-        holder.txtPrice.setText(model.getProductPrice());
 
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(model.getProductImage());
@@ -63,8 +65,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
             holder.txtDiscount.setText(model.getProductDiscount()+"%");
             holder.txtOldPrice.setText("₹"+model.getProductPrice()+".00");
             holder.txtOldPrice.setPaintFlags(holder.txtOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            int discountPrice = calculateDiscount(Integer.parseInt(model.getProductPrice()),model.getProductDiscount());
-            holder.txtPrice.setText("₹"+(Integer.parseInt(model.getProductPrice()) - discountPrice)+".00");
+            int discountPrice = Global.calculateDiscount(Integer.parseInt(model.getProductPrice()),model.getProductDiscount());
+            int totalPrice = (Integer.parseInt(model.getProductPrice()) - discountPrice) * model.getQuantity();
+            holder.txtPrice.setText("₹"+totalPrice+".00");
 
         }
         else {
@@ -93,6 +96,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
                 model.setCart(true);
                 model.setQuantity(1);
                 helper.updateQuantity(model.getId(),1);
+                mainActivity.updateCartCount();
                 notifyItemChanged(position);
 
             }
@@ -107,6 +111,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
             int qty = model.getQuantity();
             qty++;
             model.setQuantity(qty);
+            updatePrice(holder, qty,model.getProductDiscountPrice());
             notifyItemChanged(position);
             helper.updateQuantity(model.getId(),qty);
         });
@@ -119,9 +124,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
                 helper.updateQuantity(model.getId(),qty);
             }
             else {
-                model.setQuantity(0);
+                model.setQuantity(1);
                 helper.updateQuantity(model.getId(),0);
                 helper.addAndRemoveItemFromCart(model.getId(),false);
+                mainActivity.updateCartCount();
                 model.setCart(false);
             }
             notifyItemChanged(position);
@@ -173,10 +179,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
         return productList.size();
     }
 
-    private int calculateDiscount(int amount, int discountPercent) {
-        return (amount / 100) * discountPercent;
+    private void updatePrice(ProductsViewHolder holder, int quantity, int price) {
+        holder.txtPrice.setText("₹"+(price*quantity)+".00");
     }
-
     public void updateList( ArrayList<ProductsModel> list){
         this.productList = list ;
         notifyDataSetChanged();

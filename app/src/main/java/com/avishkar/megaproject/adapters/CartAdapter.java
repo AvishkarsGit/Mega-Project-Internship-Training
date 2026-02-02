@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avishkar.megaproject.R;
+import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.helper.DatabaseHelper;
 import com.avishkar.megaproject.holders.CartViewHolder;
 import com.avishkar.megaproject.models.ProductsModel;
@@ -66,8 +67,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
             holder.txtCartDiscount.setText(product.getProductDiscount()+"%");
             holder.txtCartOldPrice.setText("₹"+product.getProductPrice()+".00");
             holder.txtCartOldPrice.setPaintFlags(holder.txtCartOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            int discountPrice = calculateDiscount(Integer.parseInt(product.getProductPrice()) , product.getProductDiscount());
-            holder.cartPrice.setText("₹"+(Integer.parseInt(product.getProductPrice()) - discountPrice)+".00");
+            int discountPrice = Global.calculateDiscount(Integer.parseInt(product.getProductPrice()) , product.getProductDiscount());
+            product.setProductDiscountPrice(Integer.parseInt(product.getProductPrice()) - discountPrice);
+            holder.cartPrice.setText("₹"+product.getProductDiscountPrice()+".00");
         }else {
 
             holder.txtCartDiscount.setVisibility(GONE);
@@ -77,14 +79,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
 
         holder.btnadd.setOnClickListener(v -> {
-
             int qty = product.getQuantity();
             qty++;
             product.setQuantity(qty);
             notifyItemChanged(position);
             helper.updateQuantity(product.getId() , qty);
-
-
         });
 
         holder.btnRemove.setOnClickListener(v -> {
@@ -118,15 +117,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
             boolean isRemoved = helper.addAndRemoveItemFromCart(product.getId(), false);
 
-
             if (isRemoved) {
-
                 product.setCart(false);
                 cartList.remove(position);
                 notifyItemRemoved(position);
-
                 Toast.makeText(context, "Item removed from cart", Toast.LENGTH_SHORT).show();
-            } else {
+            }
+
+            else {
                 Toast.makeText(context, "Failed to remove item", Toast.LENGTH_SHORT).show();
             }
 
@@ -135,9 +133,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
     }
 
-    private int calculateDiscount(int amount, int discountPercent) {
-        return (amount / 100) * discountPercent;
-    }
+
 
     @Override
     public int getItemCount() {
