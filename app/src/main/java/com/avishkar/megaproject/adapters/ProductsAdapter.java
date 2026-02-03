@@ -65,17 +65,22 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
             holder.txtDiscount.setText(model.getProductDiscount()+"%");
             holder.txtOldPrice.setText("₹"+model.getProductPrice()+".00");
             holder.txtOldPrice.setPaintFlags(holder.txtOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            int discountPrice = Global.calculateDiscount(Integer.parseInt(model.getProductPrice()),model.getProductDiscount());
-            int totalPrice = (Integer.parseInt(model.getProductPrice()) - discountPrice) * model.getQuantity();
-            holder.txtPrice.setText("₹"+totalPrice+".00");
 
         }
         else {
             //show only normal price
             holder.txtDiscount.setVisibility(View.GONE);
             holder.txtOldPrice.setVisibility(View.GONE);
-            holder.txtPrice.setText("₹"+model.getProductPrice()+".00");
         }
+
+        updatePrice(
+                holder,
+                model.getQuantity() > 0 ? model.getQuantity() : 1,
+                Integer.parseInt(model.getProductPrice()),
+                model.isDiscount(),
+                model.getProductDiscount()
+        );
+
         //check if item is in the cart
         if (model.isCart()) {
             holder.btnAddToCart.setVisibility(View.GONE);
@@ -111,9 +116,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
             int qty = model.getQuantity();
             qty++;
             model.setQuantity(qty);
-            updatePrice(holder, qty,model.getProductDiscountPrice());
             notifyItemChanged(position);
             helper.updateQuantity(model.getId(),qty);
+            updatePrice(holder,qty,Integer.parseInt(model.getProductPrice()),model.isDiscount(),model.getProductDiscount());
         });
 
        holder.txtQuantityMinus.setOnClickListener(v -> {
@@ -121,7 +126,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
             if (qty > 1) {
                 qty--;
                 model.setQuantity(qty);
-                helper.updateQuantity(model.getId(),qty);
+                helper.updateQuantity(model.getId(),qty); updatePrice(holder,qty,Integer.parseInt(model.getProductPrice()),model.isDiscount(),model.getProductDiscount());
             }
             else {
                 model.setQuantity(1);
@@ -179,9 +184,23 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder> {
         return productList.size();
     }
 
-    private void updatePrice(ProductsViewHolder holder, int quantity, int price) {
-        holder.txtPrice.setText("₹"+(price*quantity)+".00");
+    private void updatePrice(ProductsViewHolder holder, int quantity, int price,boolean isDiscount, int discount) {
+        int totalPrice = calculateTotalPrice(price,quantity,isDiscount,discount);
+        holder.txtPrice.setText("₹"+totalPrice+".00");
     }
+
+    private int calculateTotalPrice(int price, int quantity, boolean isDiscount, int discount){
+        if (isDiscount) {
+            int totalDiscount = Global.calculateDiscount(price,discount);
+            int discountPrice = price - totalDiscount;
+            return discountPrice * quantity;
+        }
+        else {
+            return price * quantity;
+        }
+    }
+
+
     public void updateList( ArrayList<ProductsModel> list){
         this.productList = list ;
         notifyDataSetChanged();

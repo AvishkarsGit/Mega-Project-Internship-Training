@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         productsList =  helper.getAllProducts();
         adapter= new ProductsAdapter(MainActivity.this,productsList,this);
         binding.productsRv.setAdapter(adapter);
-        cartAdapter = new CartAdapter(MainActivity.this,productsList);
+        //cartAdapter = new CartAdapter(MainActivity.this,productsList);
         updateCartCount();
     }
 

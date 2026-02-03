@@ -16,9 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avishkar.megaproject.R;
+import com.avishkar.megaproject.activities.AddCartActivity;
 import com.avishkar.megaproject.constants.Global;
 import com.avishkar.megaproject.helper.DatabaseHelper;
 import com.avishkar.megaproject.holders.CartViewHolder;
+import com.avishkar.megaproject.holders.ProductsViewHolder;
 import com.avishkar.megaproject.models.ProductsModel;
 
 import java.util.ArrayList;
@@ -28,11 +30,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
     private Context context;
     private ArrayList<ProductsModel> cartList;
+    private AddCartActivity cartActivity;
     private DatabaseHelper helper;
 
-    public CartAdapter(Context context, ArrayList<ProductsModel> cartList) {
+    public CartAdapter(Context context, ArrayList<ProductsModel> cartList,AddCartActivity cartActivity) {
         this.context = context;
         this.cartList = cartList;
+        this.cartActivity = cartActivity;
         helper = new DatabaseHelper(context);
     }
     @NonNull
@@ -67,15 +71,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
             holder.txtCartDiscount.setText(product.getProductDiscount()+"%");
             holder.txtCartOldPrice.setText("₹"+product.getProductPrice()+".00");
             holder.txtCartOldPrice.setPaintFlags(holder.txtCartOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            int discountPrice = Global.calculateDiscount(Integer.parseInt(product.getProductPrice()) , product.getProductDiscount());
-            product.setProductDiscountPrice(Integer.parseInt(product.getProductPrice()) - discountPrice);
-            holder.cartPrice.setText("₹"+product.getProductDiscountPrice()+".00");
         }else {
-
             holder.txtCartDiscount.setVisibility(GONE);
             holder.txtCartOldPrice.setVisibility(GONE);
-            holder.cartPrice.setText("₹"+product.getProductPrice()+".00");
+
         }
+        updatePrice(
+                holder,
+                product.getQuantity(),
+                Integer.parseInt(product.getProductPrice()),
+                product.isDiscount(),
+                product.getProductDiscount()
+        );
 
 
         holder.btnadd.setOnClickListener(v -> {
@@ -84,6 +91,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
             product.setQuantity(qty);
             notifyItemChanged(position);
             helper.updateQuantity(product.getId() , qty);
+            updatePrice(holder,qty,Integer.parseInt(product.getProductPrice()),product.isDiscount(),product.getProductDiscount());
+            cartActivity.calculateTotal();
         });
 
         holder.btnRemove.setOnClickListener(v -> {
@@ -94,17 +103,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
                 product.setQuantity(qty);
                 helper.updateQuantity(product.getId(), qty);
                 notifyItemChanged(position);
+                updatePrice(holder,qty,Integer.parseInt(product.getProductPrice()),product.isDiscount(),product.getProductDiscount());
+                cartActivity.calculateTotal();
 
             }else {
-                product.setQuantity(0);
+                product.setQuantity(1);
                 helper.updateQuantity(product.getId() , 0);
                 boolean isRemove = helper.addAndRemoveItemFromCart(product.getId() , false);
 
                 if (isRemove){
-
                     product.setCart(false);
                     cartList.remove(position);
                     notifyItemRemoved(position);
+                    cartActivity.calculateTotal();
+                    cartActivity.loadCartProducts();
 
                 }else{
                     Toast.makeText(context, "Failed to remove item", Toast.LENGTH_SHORT).show();
@@ -134,10 +146,27 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
     }
 
 
-
     @Override
     public int getItemCount() {
         return cartList.size();
     }
+
+
+    private void updatePrice(CartViewHolder holder, int quantity, int price, boolean isDiscount, int discount) {
+        int totalPrice = calculateTotalPrice(price,quantity,isDiscount,discount);
+        holder.cartPrice.setText("₹"+totalPrice+".00");
+    }
+
+    private int calculateTotalPrice(int price, int quantity, boolean isDiscount, int discount){
+        if (isDiscount) {
+            int totalDiscount = Global.calculateDiscount(price,discount);
+            int discountPrice = price - totalDiscount;
+            return discountPrice * quantity;
+        }
+        else {
+            return price * quantity;
+        }
+    }
+
 }
 
